@@ -1,0 +1,8 @@
+---
+- name: Booting to Network Operating System image
+  hosts: "{{ provision_server | default('localhost') }}"
+  connection: local
+  gather_facts: false
+  roles:
+    - roles/provision/dell
+    - roles/general/pause
