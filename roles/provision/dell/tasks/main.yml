@@ -18,7 +18,7 @@
       share_user: "{{ cifs_share_user }}"
       share_password: "{{ cifs_share_password }}"
       iso_image: "{{ cifs_iso_image }}"        
-      expose_duration: 15
+      expose_duration: 75
     when: os_deploy_type == "cifs" and vendor|lower =="dell"
 
   - name: "Booting to Network Operating System image (NFS)"
@@ -30,5 +30,5 @@
       share_user: "{{ nfs_share_user }}"
       share_password: "{{ nfs_share_password }}"
       iso_image: "{{ nfs_iso_image }}"
-      expose_duration: 15
+      expose_duration: 75
     when: os_deploy_type == "nfs" and vendor|lower =="dell"
