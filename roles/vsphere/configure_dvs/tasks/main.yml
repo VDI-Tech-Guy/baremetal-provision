@@ -2,6 +2,6 @@
 
   - name: Configure DVS
     include_tasks: configure_dvs.yml
-    with_items: "{{ hosts }}"
-    loop_control:
-      loop_var: outside
+    # with_items: "{{ hosts }}"
+    # loop_control:
+    #   loop_var: outside

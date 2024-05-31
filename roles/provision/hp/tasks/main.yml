@@ -11,6 +11,7 @@
 
 - debug:
     msg: "{{ http_share }}"
+  when: vendor|lower =="hp"
 
 - name: Task to boot a system using an ISO from an HP iLO interface only if the system is an HP server
   community.general.hpilo_boot:

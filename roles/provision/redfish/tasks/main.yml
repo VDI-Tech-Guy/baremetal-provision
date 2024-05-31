@@ -11,7 +11,8 @@
 
 - pause:
     minutes: 1
-
+  when: vendor|lower =="hp"
+  
 - name: Task to boot a system using an ISO from an HP iLO interface only if the system is an HP server
   community.general.hpilo_boot:
     host: "{{ ilo_ip }}"
@@ -20,4 +21,4 @@
     media: cdrom
     state: boot_once
     image: "{{ http_share }}"
-  when: item.vendor|lower =="hp"
+  when: vendor|lower =="hp"
