@@ -1,0 +1,32 @@
+---
+- name: Add ESXi license and assign to  "{{outside.esxi_hostname}}"
+  community.vmware.vcenter_license:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ outside.esxi_hostname }}"
+    license: "{{ esxi_license }}"
+    state: present
+
+- name: Set NTP setting for  "{{outside.esxi_hostname}}"
+  vmware_host_ntp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ outside.esxi_hostname }}'
+    state: present
+    ntp_servers:
+      - pool.ntp.org
+
+- name: Start ntpd setting for  "{{outside.esxi_hostname}}"
+  community.vmware.vmware_host_service_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ outside.esxi_hostname }}'
+    service_name: ntpd
+    service_policy: on
+    state: present

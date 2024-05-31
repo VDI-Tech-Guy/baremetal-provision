@@ -1,0 +1,18 @@
+--- 
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  name: Booting to Network Operating System image
+  tasks: 
+
+    - name: Configure DVS
+      include: add_dvs_include_list.yaml
+      with_items: "{{ hosts }}"
+      loop_control:
+        loop_var: outside
+
+    - name: Configure Hosts additional Settings
+      include: configure_host_include_list.yaml
+      with_items: "{{ hosts }}"
+      loop_control:
+        loop_var: outside
