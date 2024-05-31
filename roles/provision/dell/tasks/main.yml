@@ -1,39 +1,34 @@
 ---
 
-- name: Turn system power off
-  community.general.redfish_command:
-    category: Systems
-    command: PowerForceOff
-    baseuri: "{{ item.redfish_ip }}"
-    username: "{{ redfish_user }}"
-    password: "{{ redfish_password }}"
-  when: item.vendor|lower == "redfish"
-  with_items: "{{hosts}}"
+  - name: "Power off Dell Server"
+    dellemc.openmanage.dellemc_change_power_state:
+      idrac_ip: "{{ idrac_ip }}"
+      idrac_password: "{{ idrac_password }}"
+      idrac_user: "{{ idrac_user }}"
+      change_power: ForceOff
+    when: vendor|lower == "dell"
+    ignore_errors: true
 
-- name: Insert Virtual Media
-  community.general.redfish_command:
-    category: Systems
-    command: VirtualMediaInsert
-    baseuri: "{{ item.redfish_ip }}"
-    username: "{{ redfish_user }}"
-    password: "{{ redfish_password }}"
-    virtual_media:
-      image_url: "{{ http_share }}"
-      media_types:
-        - CD
-#        resource_id: 1
-  when: item.vendor|lower == "redfish"
-  with_items: "{{hosts}}"
+  - name: "Booting to Network Operating System image (CIFS)"
+    dellemc.openmanage.idrac_os_deployment:
+      idrac_ip: "{{ item.idrac_ip }}"
+      idrac_password: "{{ idrac_password }}"
+      idrac_user: "{{ idrac_user }}"
+      share_name: "{{ cifs_share_name }}"
+      share_user: "{{ cifs_share_user }}"
+      share_password: "{{ cifs_share_password }}"
+      iso_image: "{{ cifs_iso_image }}"        
+      expose_duration: 15
+    when: os_deploy_type == "cifs" and vendor|lower =="dell"
 
-- pause:
-    minutes: 1
-
-- name: Turn system power on
-  community.general.redfish_command:
-    category: Systems
-    command: PowerReboot
-    baseuri: "{{ item.redfish_ip }}"
-    username: "{{ redfish_user }}"
-    password: "{{ redfish_password }}"
-  when: onetimeboot.changed and item.vendor|lower == "redfish"
-  with_items: "{{hosts}}"
+  - name: "Booting to Network Operating System image (NFS)"
+    dellemc.openmanage.idrac_os_deployment:
+      idrac_ip: "{{ idrac_ip }}"
+      idrac_password: "{{ idrac_password }}"
+      idrac_user: "{{ idrac_user }}"
+      share_name: "{{ nfs_share_name }}"
+      share_user: "{{ nfs_share_user }}"
+      share_password: "{{ nfs_share_password }}"
+      iso_image: "{{ nfs_iso_image }}"
+      expose_duration: 15
+    when: os_deploy_type == "nfs" and vendor|lower =="dell"
