@@ -1,6 +1,6 @@
 ---
 - name: Booting to Network Operating System image
-  hosts: localhost
+  hosts: "{{ provision_server | default('localhost') }}"
   connection: local
   gather_facts: false
   roles:
