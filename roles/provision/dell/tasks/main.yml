@@ -1,0 +1,39 @@
+---
+
+- name: Turn system power off
+  community.general.redfish_command:
+    category: Systems
+    command: PowerForceOff
+    baseuri: "{{ item.redfish_ip }}"
+    username: "{{ redfish_user }}"
+    password: "{{ redfish_password }}"
+  when: item.vendor|lower == "redfish"
+  with_items: "{{hosts}}"
+
+- name: Insert Virtual Media
+  community.general.redfish_command:
+    category: Systems
+    command: VirtualMediaInsert
+    baseuri: "{{ item.redfish_ip }}"
+    username: "{{ redfish_user }}"
+    password: "{{ redfish_password }}"
+    virtual_media:
+      image_url: "{{ http_share }}"
+      media_types:
+        - CD
+#        resource_id: 1
+  when: item.vendor|lower == "redfish"
+  with_items: "{{hosts}}"
+
+- pause:
+    minutes: 1
+
+- name: Turn system power on
+  community.general.redfish_command:
+    category: Systems
+    command: PowerReboot
+    baseuri: "{{ item.redfish_ip }}"
+    username: "{{ redfish_user }}"
+    password: "{{ redfish_password }}"
+  when: onetimeboot.changed and item.vendor|lower == "redfish"
+  with_items: "{{hosts}}"

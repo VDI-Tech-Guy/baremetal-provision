@@ -1,0 +1,11 @@
+---
+
+- set_fact: mydate="{{lookup('pipe','date')}}"
+
+- name: Code Finished Executing at Time/Date
+  debug:
+    var=mydate
+
+- name: Pause for OS Deployment and KS Configuration (EST 20 min)
+  pause:
+    minutes: 20

@@ -1,0 +1,13 @@
+---
+- name: Booting to Network Operating System image
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - roles/provision/dell
+    - roles/provision/redfish
+    - roles/provision/hp
+    - roles/general/pause
+    - roles/vsphere/host_check
+    - roles/vsphere/configure_dvs
+    - roles/vsphere/extra_host_settings

@@ -1,0 +1,7 @@
+---
+
+  - name: Configure Hosts additional Settings
+    include_tasks: extra_hosts_settings.yml
+    with_items: "{{ hosts }}"
+    loop_control:
+      loop_var: outside

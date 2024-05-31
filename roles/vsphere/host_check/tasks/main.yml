@@ -1,0 +1,22 @@
+---
+
+  - name: Checking Host for being Fully Online and Connected to vCenter 
+    community.vmware.vmware_host_facts:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      esxi_hostname: "{{ item.esxi_hostname }}"
+    register: connected
+    until: connected is not failed
+    retries: 20
+    delay: 60
+    vars:
+      color_reset: "\e[0m"
+      yellow: "\e[0m\e[38;5;226m"
+      ansible_callback_diy_runner_retry_msg: >-
+        {%- set result = ansible_callback_diy.result.output -%}
+        {%- set retries_left = result.retries - result.attempts -%}
+        RESOURCE NOT AVAILABLE YET - RETRYING: {{ ansible_callback_diy.task.name }} {{ yellow }}({{ retries_left }} Retries left)
+      ansible_callback_diy_runner_retry_msg_color: cyan
+    with_items: "{{ hosts }}"
