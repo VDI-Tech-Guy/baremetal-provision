@@ -2,24 +2,22 @@
 
 - name: Power off a server
   community.general.hpilo_boot:
-    host: "{{ item.ilo_ip }}"
+    host: "{{ ilo_ip }}"
     login: "{{ ilo_user }}"
     password: "{{ ilo_password }}"
     state: poweroff
-  when: item.vendor|lower =="hp"
-  with_items: "{{ hosts }}"
+  when: vendor|lower =="hp"
   ignore_errors: true
 
-- pause: 
+- pause:
     minutes: 1
 
 - name: Task to boot a system using an ISO from an HP iLO interface only if the system is an HP server
   community.general.hpilo_boot:
-    host: "{{ item.ilo_ip }}"
+    host: "{{ ilo_ip }}"
     login: "{{ ilo_user }}"
     password: "{{ ilo_password }}"
-    media: cdrom 
+    media: cdrom
     state: boot_once
     image: "{{ http_share }}"
   when: item.vendor|lower =="hp"
-  with_items: "{{ hosts }}"
